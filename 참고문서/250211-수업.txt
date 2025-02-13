@@ -1,0 +1,219 @@
+1단계
+[microSD카드 삽입 후 부팅 이후 작업]
+### Welcome to Raspberry Pi -> Next
+### Set Country  → Country, Language, Timezone 설정  ->Next (그냥 지나가세요)
+### Change Password → 기본 사용자 Pi 에 대한 패스워드 설정(Pi/raspberry)
+                         -> 다른 패스워드 계정 사용해도 됩니다. 
+### Setup Screen → HDMI를 사용하는 경우 체크 X
+### WiFi Setting  
+### Upadate Software → 인터넷 연결시 사용이 가능
+### Setup Complete → Restart로 시스템 다시 시작
+
+2단계
+라즈베리파이 환경 설정
+기본설정(Preference) -> Raspberry Pi Configuration(상단 왼쪽 메뉴 -> Preference -> Raspberry Pi Configuration)
+<Localisation 탭>
+1. Locale -> ko(korean)/utf-8
+2. Timezone -> Asia/Seoul
+3. keyboard -> Korean/Korean(101/104-key compatible)
+4. wifi Country 설정 -> wifi 시 국가 지정
+---
+5. 강의장 수업을 위한 LAN 설정
+ 상단 인터넷 버튼 클릭 -> Advanced Options -> wired에 있는 항목을 선택
+-> ipv4 탭으로 이동 -> add 버튼 클릭 후에 주어진 네트워크 정보를 입력. 
+네트워크 정보 
+ip : 192.168.0.xxx
+subnet mask(prefix) : 24
+gateway : 192.168.0.1
+DNS : 168.126.63.1, 168.126.63.2
+(저장)
+
+3단계
+라즈비언 업데이트
+[Command Line Interface 창에서]
+sudo apt-get update
+sudo apt-get upgrade
+
+======================================
+4단계 한글폰트, 입력기 설치
+sudo apt-get install fonts-unfonts-core ibus-hangul
+
+기본설정(Preference) - IBus preference -> input method 탭 
+-> add -> ... korean 검색 -> hangul 추가
+hangul 클릭 -> 오른쪽 Preferences 클릭
+한영 toggle key 설정에서 입력된 내용을 제거하고, add 버튼 클릭
+변환시 사용할 토클을 입력 : ctrl + space
+확인(저장)으로 저장하고 나감. 
+
+im-config -n ibus
+
+이후에 재부팅하면 한글화 및 한글 폰트 변환 사용이 가능함.
+
+==================================================================
+네트워크 접속 설정
+기본설정(Preferences) -> Raspberrey Pi Configuration(라즈베리 파이 설정)
+상단 "인터페이스" 탭 선택 후 
+# SSH
+# VNC
+위 두개 서비스를 활성화 
+
+# SSH 서비스 연결... 
+윈도우 CMD에서 
+ssh (계정)@(서버주소)
+예)  ssh pi@192.168.0.121    # pi는 계정, 192.168.0.121은 라즈베리파이 주소
+The authenticity of host '192.168.0.121 (192.168.0.121)' can't be established.
+ED25519 key fingerprint is SHA256:i4bmu0XHzf/E0DJPeGCQjlBv/BWrwb0OrTSgKe/TFr8.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.0.121' (ED25519) to the list of known hosts.
+pi@192.168.0.121's password: (패스워드는 표시되지 않아요)
+Linux raspberrypi 6.6.51+rpt-rpi-v8 #1 SMP PREEMPT Debian 1:6.6.51-1+rpt3 (2024-10-08) aarch64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Tue Feb 11 11:46:22 2025
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+pi@raspberrypi:~ $ ifconfig
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.121  netmask 255.255.255.0  broadcast 192.168.0.255
+        inet6 fe80::b1c:cac3:e76a:9914  prefixlen 64  scopeid 0x20<link>
+        ether d8:3a:dd:40:1c:63  txqueuelen 1000  (Ethernet)
+        RX packets 221328  bytes 56377236 (53.7 MiB)
+        RX errors 0  dropped 517  overruns 0  frame 0
+        TX packets 23916  bytes 19473435 (18.5 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 31  bytes 4589 (4.4 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 31  bytes 4589 (4.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+wlan0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.10.241  netmask 255.255.255.0  broadcast 192.168.10.255
+        inet6 fe80::cfe9:c7fa:c4b:128a  prefixlen 64  scopeid 0x20<link>
+        ether d8:3a:dd:40:1c:65  txqueuelen 1000  (Ethernet)
+        RX packets 1646  bytes 288612 (281.8 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 99  bytes 10682 (10.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+pi@raspberrypi:~ $
+
+===============================================
+# VNC 연결 테스트 (활성화 되어 있는 경우)
+
+카톡에 파일을 설치합니다.(VNC Viewer-7.12.1-Windows.zip 내에 있는 파일)
+
+RealVNC Viewer 상단에 라즈베리파이 주소를 입력!!
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+# SAMBA
+ 네트워크 저장장치 연결(공유폴더 설정)
+
+cli(cli 터미널)에서 명령어로 설치
+# 설치
+sudo apt-get install samba samba-common-bin
+# samba서비스를 사용할 계정(여러분 사용계정) 추가
+sudo smbpasswd -a pi      # pi는 계정
+New SMB password:  (패스워드는 포시되지 않아요)
+Retype new SMB password:
+Added user pi.
+
+# samba 설정(네트워크 저장 장치 설정-공유폴더 설정)
+sudo vi /etc/samba/smb.conf
+]] : 맨 끝으로 이동
+o : 입력(커서 아래에 입력)
+(다음 내용을 추가)
+# 아래의 pi는 계정명-다른 계정을 사용하면 변경해 주세요. 
+--------------------------------------------------
+
+[pi]
+	comment = pi shared folder
+	path = /home/pi      
+	valid users = pi
+	browseable = yes
+	guest ok = no
+	read only = no
+	create mask = 0777
+--------------------------------------------------
+저장은 
+"esc" 키를 누르고, ":" 를 누른 다음에 "wq" 입력 후 엔터
+
+# samba 서버 재시작
+sudo /etc/init.d/smbd restart
+
+# 공유폴더 접속 테스트 
+windows key + r (실행창)
+\\(라즈베리파이 서버 주소)
+
+공유폴더 이름 확인 (pi) 설정에 []안에 있는 이름
+로그인 후 파일이 보이는지 확인
+
+
+# 개발 툴 (vscode 설치)
+# 설치
+sudo apt-get install code
+
+# 실행
+# vscode 실행은 code (디렉터리)
+
+# 개발 환경 구축
+opencv 프로젝트 폴더로... 
+
+#1. opencv로 이동
+#2. python -m venv venv   # 가상 환경 구성
+# 가상환경으로 실행 : source ./venv/bin/activate
+#3. vscode 실행 (code .)
+#4. 확장팩 설치 - python jupyternote, ipykernal도 설치
+   확장자 ipynb 인 파일 생성해서 작업.
+#5. 코드는 카톡에 있는 코드 작성 실행
+
+# Opencv 설치... 
+라즈베리파이에 Opencv 설치... 
+1) 시스템 확인 
+getconf LONG_BIT
+결과 : 64(O), 32
+
+https://qengineering.eu/install-opencv-on-raspberry-pi.html
+
+가상환경에서 1번째 방법
+pip install opencv-contrib-python
+
+SWAP 설정
+sudo nano /sbin/dphys-swapfile
+내에서 CONF_MAXSWAP 의 사이즈를 4096으로 변경
+
+sudo nano /etc/dphys-swapfile
+내에서 CONF_SWAPSIZE 의 크기를 4096으로 변경
+
+sudo reboot
+
+다시 접속해서 free -m 명령어로 SWAP이 4096으로 늘어난 것을 확인
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

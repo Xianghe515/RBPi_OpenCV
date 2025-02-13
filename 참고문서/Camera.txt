@@ -1,0 +1,11 @@
+%pip install picamera
+import time
+import picamera  # 라즈베리파이 카메라 모듈 로드
+
+picam = picamera.PiCamera()   # 카메라 Open
+try:
+    picam.start_preview()   # 화면에 Preview 영상 보여주기
+    time.sleep(5)         # 5초간 대기
+    picam.stop_preview()   # Preview Stop
+finally:
+    picam.close()         # 카메라 Closss

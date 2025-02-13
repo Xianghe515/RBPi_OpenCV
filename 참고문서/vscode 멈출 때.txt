@@ -1,0 +1,18 @@
+vscode가 지속적으로 멈추는 오류
+"the window is not responding"
+->https://forums.raspberrypi.com/viewtopic.php?t=383712
+해결 방법
+
+
+
+I found a solution
+
+That is to disable the hardware acceleration
+
+This is done by using the file manager in the "View" tab, click the option "Show Hidden Files", you should then see a folder called ".vscode"
+
+And in that folder is a file called "argv.json". You can edit this file with any file editor or other IDE. I used Geany. I uncommented the line where it said ""disable-hardware-acceleration": true,". Save, then in the terminal, type "code"
+
+It should now run to the splash screen of the release notes, and work normally
+
+Don't forget to hide the folder and files again
